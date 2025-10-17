@@ -2,7 +2,7 @@ import "#/styles/globals.css";
 
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-
+import Header from "#/app/_components/header";
 import { TRPCReactProvider } from "#/trpc/react";
 
 export const metadata: Metadata = {
@@ -22,7 +22,10 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={`${geist.variable}`}>
 			<body>
-				<TRPCReactProvider>{children}</TRPCReactProvider>
+				<TRPCReactProvider>
+					<Header />
+					<main className="min-h-screen bg-gray-50">{children}</main>
+				</TRPCReactProvider>
 			</body>
 		</html>
 	);
