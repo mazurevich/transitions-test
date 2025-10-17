@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Offer {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String
+    price       Float
+    currency    String
+    stock       Int
+    location    String
+    imageUrl    String
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    OrderItem OrderItem[]
+
+    @@index([title])
+}
+
+model OfferImage {
+    id        Int      @id @default(autoincrement())
+    offerId   Int
+    imageUrl  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    password  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    UserCart     UserCart[]
+    UserCartItem UserCartItem[]
+    Order        Order[]
+
+    @@index([email])
+}
+
+model UserCart {
+    id           Int            @id @default(autoincrement())
+    userId       Int            @unique
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
+    User         User           @relation(fields: [userId], references: [id])
+    UserCartItem UserCartItem[]
+
+    @@index([userId])
+}
+
+model UserCartItem {
+    id         Int      @id @default(autoincrement())
+    userCartId Int
+    userId     Int
+    offerId    Int
+    quantity   Int
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    UserCart   UserCart @relation(fields: [userCartId], references: [id])
+    User       User     @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+    @@index([offerId])
+}
+
+model Order {
+    id                       Int      @id @default(autoincrement())
+    userId                   Int
+    paymentMethod            String
+    paymentStatus            String
+    paymentDate              DateTime
+    paymentTransactionId     String
+    paymentTransactionStatus String
+    paymentTransactionDate   DateTime
+    createdAt                DateTime @default(now())
+    updatedAt                DateTime @updatedAt
+
+    User      User        @relation(fields: [userId], references: [id])
+    OrderItem OrderItem[]
+
+    @@index([userId])
+}
+
+model OrderItem {
+    id        Int      @id @default(autoincrement())
+    orderId   Int
+    offerId   Int
+    quantity  Int
+    price     Float
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    Order Order @relation(fields: [orderId], references: [id])
+    Offer Offer @relation(fields: [offerId], references: [id])
+
+    @@index([orderId])
+    @@index([offerId])
+}
