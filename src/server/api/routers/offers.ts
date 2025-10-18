@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -89,5 +90,34 @@ export const offersRouter = createTRPCRouter({
 			});
 
 			return offersWithStats;
+		}),
+	getOffer: publicProcedure
+		.input(z.object({ id: z.number() }))
+		.query(async ({ ctx, input }) => {
+			const offer = await ctx.db.offer.findUnique({
+				where: { id: input.id },
+				include: {
+					OfferImage: {
+						select: {
+							id: true,
+							imageUrl: true,
+							title: true,
+						},
+					},
+					OfferReview: {
+						select: {
+							id: true,
+							rating: true,
+							comment: true,
+						},
+					},
+				},
+			});
+
+			if (!offer) {
+				throw new TRPCError({ code: "NOT_FOUND", message: "Offer not found" });
+			}
+
+			return offer;
 		}),
 });

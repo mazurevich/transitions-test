@@ -6,7 +6,7 @@ import { OfferCard } from "./_components/offers-card";
 export default async function CatalogPage() {
 	const offers = await api.offers.getOffers({
 		page: 1,
-		limit: 10,
+		limit: 12,
 		search: "",
 	});
 

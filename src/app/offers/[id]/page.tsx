@@ -1,17 +1,12 @@
-"use client";
-
-import {
-	ArrowLeft,
-	Heart,
-	RotateCcw,
-	Share2,
-	Shield,
-	ShoppingCart,
-	Star,
-	Truck,
-} from "lucide-react";
+import { ArrowLeft, RotateCcw, Shield, Star, Truck } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { api } from "#/trpc/server";
+import {
+	AddToCart,
+	Carousel,
+	ShareButton,
+	WishlistButton,
+} from "./_components";
 
 // Mock data for offer details
 const mockOfferDetails = {
@@ -53,25 +48,17 @@ const mockOfferDetails = {
 	stockCount: 15,
 };
 
-const OfferDetailsPage = () => {
-	const [selectedImage, setSelectedImage] = useState(0);
-	const [quantity, setQuantity] = useState(1);
-	const [isWishlisted, setIsWishlisted] = useState(false);
+const OfferDetailsPage = async ({
+	params,
+}: {
+	params: Promise<{ id: string }>;
+}) => {
+	const { id } = await params;
+	const offer = await api.offers.getOffer({ id: Number.parseInt(id) });
 
-	const handleAddToCart = () => {
-		// TODO: Implement add to cart functionality
-		console.log("Add to cart:", mockOfferDetails.id, "Quantity:", quantity);
-	};
-
-	const handleWishlistToggle = () => {
-		setIsWishlisted(!isWishlisted);
-		// TODO: Implement wishlist functionality
-		console.log("Wishlist toggle:", mockOfferDetails.id);
-	};
-
-	const handleShare = () => {
-		// TODO: Implement share functionality
-		console.log("Share product:", mockOfferDetails.id);
+	const _handleShare = () => {
+		// TO_handleSharent share functionality
+		console.log("Share product:", offer.id);
 	};
 
 	return (
@@ -88,37 +75,7 @@ const OfferDetailsPage = () => {
 
 			<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
 				{/* Product Images */}
-				<div className="space-y-4">
-					<div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-						<img
-							src={mockOfferDetails.images[selectedImage]}
-							alt={mockOfferDetails.title}
-							className="h-full w-full object-cover"
-						/>
-					</div>
-					<div className="grid grid-cols-3 gap-2">
-						{mockOfferDetails.images.map((image, index) => (
-							<button
-								key={image}
-								type="button"
-								onClick={() => setSelectedImage(index)}
-								className={`aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
-									selectedImage === index
-										? "border-blue-500"
-										: "border-gray-200 hover:border-gray-300"
-								}`}
-								aria-label={`View image ${index + 1}`}
-							>
-								<img
-									src={image}
-									alt={`${mockOfferDetails.title} view ${index + 1}`}
-									className="h-full w-full object-cover"
-								/>
-							</button>
-						))}
-					</div>
-				</div>
-
+				<Carousel images={offer.OfferImage} />
 				{/* Product Details */}
 				<div className="space-y-6">
 					<div>
@@ -127,30 +84,8 @@ const OfferDetailsPage = () => {
 								-{mockOfferDetails.discount}% OFF
 							</span>
 							<div className="flex items-center space-x-2">
-								<button
-									type="button"
-									onClick={handleWishlistToggle}
-									className={`rounded-full p-2 transition-colors ${
-										isWishlisted
-											? "bg-red-50 text-red-500"
-											: "text-gray-400 hover:bg-red-50 hover:text-red-500"
-									}`}
-									aria-label={
-										isWishlisted ? "Remove from wishlist" : "Add to wishlist"
-									}
-								>
-									<Heart
-										className={`h-5 w-5 ${isWishlisted ? "fill-current" : ""}`}
-									/>
-								</button>
-								<button
-									type="button"
-									onClick={handleShare}
-									className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
-									aria-label="Share product"
-								>
-									<Share2 className="h-5 w-5" />
-								</button>
+								<WishlistButton offerId={offer.id} />
+								<ShareButton offerId={offer.id} />
 							</div>
 						</div>
 						<h1 className="mb-4 font-bold text-3xl text-gray-900">
@@ -173,16 +108,15 @@ const OfferDetailsPage = () => {
 								))}
 							</div>
 							<span className="ml-2 text-gray-600">
-								{mockOfferDetails.rating} ({mockOfferDetails.reviewCount}{" "}
-								reviews)
+								{offer.rating} ({offer.OfferReview.length} reviews)
 							</span>
 						</div>
 						<div className="mb-6 flex items-center space-x-4">
 							<span className="font-bold text-4xl text-gray-900">
-								${mockOfferDetails.price}
+								${offer.price}
 							</span>
 							<span className="text-2xl text-gray-500 line-through">
-								${mockOfferDetails.originalPrice}
+								${offer.originalPrice}
 							</span>
 						</div>
 					</div>
@@ -192,9 +126,7 @@ const OfferDetailsPage = () => {
 						<h3 className="mb-2 font-semibold text-gray-900 text-lg">
 							Description
 						</h3>
-						<p className="text-gray-600 leading-relaxed">
-							{mockOfferDetails.description}
-						</p>
+						<p className="text-gray-600 leading-relaxed">{offer.description}</p>
 					</div>
 
 					{/* Features */}
@@ -202,55 +134,18 @@ const OfferDetailsPage = () => {
 						<h3 className="mb-3 font-semibold text-gray-900 text-lg">
 							Key Features
 						</h3>
-						<ul className="grid grid-cols-2 gap-2">
-							{mockOfferDetails.features.map((feature) => (
+						{/* <ul className="grid grid-cols-2 gap-2">
+							{offer.features.map((feature) => (
 								<li key={feature} className="flex items-center text-gray-600">
 									<div className="mr-3 h-2 w-2 rounded-full bg-blue-500" />
 									{feature}
 								</li>
 							))}
-						</ul>
+						</ul> */}
 					</div>
 
 					{/* Quantity and Add to Cart */}
-					<div className="space-y-4">
-						<div className="flex items-center space-x-4">
-							<label
-								htmlFor="quantity"
-								className="font-medium text-gray-700 text-sm"
-							>
-								Quantity:
-							</label>
-							<select
-								id="quantity"
-								value={quantity}
-								onChange={(e) => setQuantity(Number(e.target.value))}
-								className="rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-							>
-								{[...Array(10)].map((_, i) => (
-									<option key={`quantity-${i + 1}`} value={i + 1}>
-										{i + 1}
-									</option>
-								))}
-							</select>
-						</div>
-						<button
-							type="button"
-							onClick={handleAddToCart}
-							disabled={!mockOfferDetails.inStock}
-							className="flex w-full items-center justify-center space-x-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
-						>
-							<ShoppingCart className="h-5 w-5" />
-							<span>
-								{mockOfferDetails.inStock ? "Add to Cart" : "Out of Stock"}
-							</span>
-						</button>
-						{mockOfferDetails.inStock && (
-							<p className="text-green-600 text-sm">
-								✓ In stock ({mockOfferDetails.stockCount} available)
-							</p>
-						)}
-					</div>
+					<AddToCart offerId={offer.id} stockCount={offer.stock} />
 
 					{/* Shipping Info */}
 					<div className="border-t pt-6">
