@@ -114,19 +114,24 @@ const generateImageUrl = (width = 400, height = 300, seed?: number): string => {
 	return `https://picsum.photos/${width}/${height}${seedParam}`;
 };
 
+const getRealUrl = async (url: string): Promise<string> => {
+  const image = await fetch(url);
+  return image.url;
+}
 // Function to generate multiple images for an offer
-const generateOfferImages = (
+const generateOfferImages = async (
 	offerId: number,
 	count: number = randomBetween(2, 4),
-): Array<{ offerId: number; imageUrl: string }> => {
-	return Array.from({ length: count }, (_, index) => {
+): Promise<Array<{ offerId: number; imageUrl: string }>> => {
+	const images = await Promise.all(Array.from({ length: count }, async (_, index) => {
+		const imageUrl = await getRealUrl(generateImageUrl(400, 300, offerId * 10 + index));
 		return {
 			offerId,
-			imageUrl: generateImageUrl(400, 300, offerId * 10 + index),
+			imageUrl,
 		};
-	});
+	}));
+	return images;
 };
-
 // Function to generate sample users for reviews
 const generateSampleUsers = async (count = 20) => {
 	const users = [];
@@ -205,7 +210,6 @@ async function main() {
 				description: `${description} This ${title.toLowerCase()} is perfect for ${category.toLowerCase()} enthusiasts. Features include premium quality materials and modern design.`,
 				price: price,
 				stock: quantity,
-				imageUrl: generateImageUrl(600, 400, i), // Main image
 				isActive: true,
 			},
 		});
@@ -213,7 +217,7 @@ async function main() {
 		offers.push(offer);
 
 		// Generate additional images for this offer
-		const offerImages = generateOfferImages(offer.id);
+		const offerImages = await generateOfferImages(offer.id);
 		await prisma.offerImage.createMany({
 			data: offerImages,
 		});

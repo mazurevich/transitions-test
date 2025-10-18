@@ -5,6 +5,14 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+	images: {
+		remotePatterns: [
+			{ protocol: "https", hostname: "fastly.picsum.photos", pathname: "/**" },
+			{ protocol: "https", hostname: "picsum.photos", pathname: "/**" },
+		],
+	},
+};
 
 export default config;
+/*  */

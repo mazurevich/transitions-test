@@ -27,11 +27,15 @@ export const offersRouter = createTRPCRouter({
 					price: true,
 					originalPrice: true,
 					stock: true,
-					imageUrl: true,
 					isActive: true,
 					createdAt: true,
 					updatedAt: true,
 					rating: true,
+					OfferImage: {
+						select: {
+							imageUrl: true,
+						},
+					},
 				},
 				skip: (input.page - 1) * input.limit,
 				take: input.limit,

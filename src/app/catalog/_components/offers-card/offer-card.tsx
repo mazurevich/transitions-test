@@ -1,5 +1,6 @@
 "use client";
 import { ShoppingCart, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
 import type { RouterOutputs } from "#/trpc/react";
@@ -11,11 +12,13 @@ export const OfferCard: FC<{ offer: OfferWithReviews }> = ({ offer }) => {
 		<div className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg">
 			<Link href={`/offers/${offer.id}`} className="block">
 				<div className="relative">
-					<img
-						src={offer.imageUrl}
+					{offer.OfferImage[0] ? <Image
+						width={400}
+						height={300}
+						src={offer.OfferImage[0].imageUrl}
 						alt={offer.title}
 						className="h-48 w-full object-cover"
-					/>
+					/> : <div className="h-48 w-full bg-gray-200 animate-pulse" />}
 					<div className="absolute top-2 left-2 rounded bg-red-500 px-2 py-1 font-medium text-sm text-white">
 						-
 						{offer.originalPrice
