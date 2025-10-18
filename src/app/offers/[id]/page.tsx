@@ -7,6 +7,9 @@ import {
 	ShareButton,
 	WishlistButton,
 } from "./_components";
+import { Description } from "./_components/description";
+import { Price } from "./_components/price";
+import { Title } from "./_components/title";
 
 // Mock data for offer details
 const mockOfferDetails = {
@@ -88,9 +91,10 @@ const OfferDetailsPage = async ({
 								<ShareButton offerId={offer.id} />
 							</div>
 						</div>
-						<h1 className="mb-4 font-bold text-3xl text-gray-900">
-							{mockOfferDetails.title}
-						</h1>
+						<Title id={offer.id} title={offer.title} />
+						{/* <h1 className="mb-4 font-bold text-3xl text-gray-900">
+							{offer.title}
+						</h1> */}
 						<div className="mb-4 flex items-center">
 							<div className="flex items-center">
 								{[...Array(5)].map((_, i) => (
@@ -111,14 +115,11 @@ const OfferDetailsPage = async ({
 								{offer.rating} ({offer.OfferReview.length} reviews)
 							</span>
 						</div>
-						<div className="mb-6 flex items-center space-x-4">
-							<span className="font-bold text-4xl text-gray-900">
-								${offer.price}
-							</span>
-							<span className="text-2xl text-gray-500 line-through">
-								${offer.originalPrice}
-							</span>
-						</div>
+						<Price
+							id={offer.id}
+							price={offer.price}
+							originalPrice={offer.originalPrice}
+						/>
 					</div>
 
 					{/* Description */}
@@ -126,7 +127,7 @@ const OfferDetailsPage = async ({
 						<h3 className="mb-2 font-semibold text-gray-900 text-lg">
 							Description
 						</h3>
-						<p className="text-gray-600 leading-relaxed">{offer.description}</p>
+						<Description id={offer.id} description={offer.description} />
 					</div>
 
 					{/* Features */}

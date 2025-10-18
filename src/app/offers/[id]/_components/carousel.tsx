@@ -2,6 +2,7 @@
 import type { OfferImage } from "@prisma/client";
 import Image from "next/image";
 import { type FC, useState } from "react";
+import { ViewTransition } from "#/app/_components";
 
 type OfferImageWithId = {
 	images: Pick<OfferImage, "id" | "imageUrl" | "title">[];
@@ -20,13 +21,15 @@ export const Carousel: FC<OfferImageWithId> = ({ images }) => {
 	return (
 		<div className="space-y-4">
 			<div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-				<Image
-					src={imageUrl}
-					alt={`${title} view ${selectedImage + 1}`}
-					className="h-full w-full object-cover"
-					width={400}
-					height={300}
-				/>
+				<ViewTransition name={`offer-image-${currentImage.id}`}>
+					<Image
+						src={imageUrl}
+						alt={`${title} view ${selectedImage + 1}`}
+						className="h-full w-full object-cover"
+						width={400}
+						height={300}
+					/>
+				</ViewTransition>
 			</div>
 			<div className="grid grid-cols-3 gap-2">
 				{images.map((image, index) => (

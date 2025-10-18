@@ -1,6 +1,7 @@
 "use client";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { ViewTransition } from "#/app/_components";
 
 export const AddToCart = ({
 	offerId,
@@ -37,15 +38,17 @@ export const AddToCart = ({
 					))}
 				</select>
 			</div>
-			<button
-				type="button"
-				onClick={handleAddToCart}
-				disabled={!inStock}
-				className="flex w-full items-center justify-center space-x-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
-			>
-				<ShoppingCart className="h-5 w-5" />
-				<span>{inStock ? "Add to Cart" : "Out of Stock"}</span>
-			</button>
+			<ViewTransition name={`offer-add-to-cart-${offerId}`}>
+				<button
+					type="button"
+					onClick={handleAddToCart}
+					disabled={!inStock}
+					className="flex w-full items-center justify-center space-x-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
+				>
+					<ShoppingCart className="h-5 w-5" />
+					<span>{inStock ? "Add to Cart" : "Out of Stock"}</span>
+				</button>
+			</ViewTransition>
 			{inStock && (
 				<p className="text-green-600 text-sm">
 					✓ In stock ({stockCount} available)

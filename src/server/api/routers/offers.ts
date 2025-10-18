@@ -35,6 +35,7 @@ export const offersRouter = createTRPCRouter({
 					OfferImage: {
 						select: {
 							imageUrl: true,
+							id: true,
 						},
 					},
 				},
