@@ -1,15 +1,7 @@
-import { api } from "#/trpc/server";
-import { OfferCard } from "./_components/offers-card";
-
-// Mock data for offers
+import { Suspense } from "react";
+import { OffersCards, OffersCardsSkeleton } from "./_components/offers-cards";
 
 export default async function CatalogPage() {
-	const offers = await api.offers.getOffers({
-		page: 1,
-		limit: 12,
-		search: "",
-	});
-
 	return (
 		<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 			<div className="mb-8">
@@ -22,9 +14,9 @@ export default async function CatalogPage() {
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{offers.map((offer) => (
-					<OfferCard key={offer.id} offer={offer} />
-				))}
+				<Suspense fallback={<OffersCardsSkeleton />}>
+					<OffersCards />
+				</Suspense>
 			</div>
 		</div>
 	);

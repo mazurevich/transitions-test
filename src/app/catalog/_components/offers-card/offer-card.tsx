@@ -6,12 +6,18 @@ import type { FC } from "react";
 import { ViewTransition } from "#/app/_components";
 import type { RouterOutputs } from "#/trpc/react";
 
-type OfferWithReviews = RouterOutputs["offers"]["getOffers"][number];
+type OfferWithReviewCount = RouterOutputs["offers"]["getOffers"][number];
 
-export const OfferCard: FC<{ offer: OfferWithReviews }> = ({ offer }) => {
+export const OfferCard: FC<{ offer: OfferWithReviewCount }> = ({ offer }) => {
+	// const serrializedOffer = JSON.stringify(offer);
+
 	return (
 		<div className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg">
-			<Link href={`/offers/${offer.id}`} className="block">
+			<Link
+				href={`/offers/${offer.id}`}
+				className="block"
+				// as={`/offers/${offer.id}`}
+			>
 				<div className="h-48 w-full overflow-hidden">
 					{offer.OfferImage[0] ? (
 						<div className="relative">

@@ -21,21 +21,12 @@ export const offersRouter = createTRPCRouter({
 					],
 					isActive: true,
 				},
-				select: {
-					id: true,
-					title: true,
-					description: true,
-					price: true,
-					originalPrice: true,
-					stock: true,
-					isActive: true,
-					createdAt: true,
-					updatedAt: true,
-					rating: true,
+				include: {
 					OfferImage: {
 						select: {
-							imageUrl: true,
 							id: true,
+							imageUrl: true,
+							title: true,
 						},
 					},
 				},
@@ -110,6 +101,16 @@ export const offersRouter = createTRPCRouter({
 							id: true,
 							rating: true,
 							comment: true,
+							createdAt: true,
+							User: {
+								select: {
+									id: true,
+									email: true,
+								},
+							},
+						},
+						orderBy: {
+							createdAt: "desc",
 						},
 					},
 				},
@@ -120,5 +121,21 @@ export const offersRouter = createTRPCRouter({
 			}
 
 			return offer;
+		}),
+	getReviews: publicProcedure
+		.input(z.object({ id: z.number() }))
+		.query(async ({ ctx, input }) => {
+			const reviews = await ctx.db.offerReview.findMany({
+				where: { offerId: input.id },
+				include: {
+					User: {
+						select: {
+							id: true,
+							email: true,
+						},
+					},
+				},
+			});
+			return reviews;
 		}),
 });

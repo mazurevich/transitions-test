@@ -11,6 +11,7 @@ const config = {
 		cacheComponents: true,
 	},
 	reactCompiler: true,
+
 	images: {
 		remotePatterns: [
 			{ protocol: "https", hostname: "fastly.picsum.photos", pathname: "/**" },

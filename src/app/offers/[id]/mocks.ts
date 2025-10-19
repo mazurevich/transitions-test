@@ -1,0 +1,38 @@
+export const mockOfferDetails = {
+	id: 1,
+	title: "Premium Wireless Headphones",
+	price: 199.99,
+	originalPrice: 249.99,
+	rating: 4.8,
+	reviewCount: 1247,
+	images: [
+		"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=400&fit=crop",
+		"https://images.unsplash.com/photo-1484704849700-f032a568e944?w=600&h=400&fit=crop",
+		"https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&h=400&fit=crop",
+	],
+	description:
+		"Experience premium sound quality with our latest wireless headphones featuring active noise cancellation, 30-hour battery life, and comfortable over-ear design.",
+	features: [
+		"Active Noise Cancellation",
+		"30-hour battery life",
+		"Quick charge (5 min = 3 hours)",
+		"Premium sound quality",
+		"Comfortable over-ear design",
+		"Bluetooth 5.0 connectivity",
+		"Voice assistant support",
+		"Foldable design",
+	],
+	specifications: {
+		"Driver Size": "40mm",
+		"Frequency Response": "20Hz - 20kHz",
+		Impedance: "32 ohms",
+		"Battery Life": "30 hours",
+		"Charging Time": "2 hours",
+		Connectivity: "Bluetooth 5.0",
+		Weight: "250g",
+		Warranty: "2 years",
+	},
+	discount: 20,
+	inStock: true,
+	stockCount: 15,
+};
