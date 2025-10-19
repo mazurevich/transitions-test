@@ -68,7 +68,7 @@ export const OfferCard: FC<{ offer: OfferWithReviews }> = ({ offer }) => {
 							))}
 						</div>
 						<span className="ml-2 text-gray-600 text-sm">
-							{offer.rating} ({offer.reviewsCount})
+							{Math.round(offer.rating * 10) / 10} ({offer.reviewsCount})
 						</span>
 					</div>
 					<div className="flex items-center justify-between">
