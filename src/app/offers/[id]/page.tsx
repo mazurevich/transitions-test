@@ -1,6 +1,8 @@
 import { ArrowLeft, RotateCcw, Shield, Star, Truck } from "lucide-react";
+import { cacheTag } from "next/cache";
 import Link from "next/link";
-import { api } from "#/trpc/server";
+import { notFound } from "next/navigation";
+import { db } from "#/server/db";
 import {
 	AddToCart,
 	Carousel,
@@ -56,8 +58,36 @@ const OfferDetailsPage = async ({
 }: {
 	params: Promise<{ id: string }>;
 }) => {
+	async function getOfferDetails(id: number) {
+		"use cache";
+		const offer = db.offer.findUnique({
+			where: { id: id },
+			include: {
+				OfferImage: {
+					select: {
+						id: true,
+						imageUrl: true,
+						title: true,
+					},
+				},
+				OfferReview: {
+					select: {
+						id: true,
+						rating: true,
+						comment: true,
+					},
+				},
+			},
+		});
+		cacheTag("offer-details", String(id));
+		return offer;
+	}
+
 	const { id } = await params;
-	const offer = await api.offers.getOffer({ id: Number.parseInt(id) });
+	const offer = await getOfferDetails(Number.parseInt(id));
+	if (!offer) {
+		return notFound();
+	}
 
 	const _handleShare = () => {
 		// TO_handleSharent share functionality
