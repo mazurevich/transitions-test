@@ -1,20 +1,19 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+"use client";
 
 import type { FC } from "react";
-import { ViewTransition } from "#/app/_components";
 
 type DetailsSkeletonProps = {
 	id: number;
 };
 export const DetailsSkeleton: FC<DetailsSkeletonProps> = ({ id }) => {
+	console.log("DetailsSkeleton");
 	return (
 		<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
 			{/* Product Images Skeleton */}
 			<div className="space-y-4">
 				{/* Main Image */}
-				<ViewTransition name={`offer-image-${id}`}>
-					<div className="aspect-square w-full animate-pulse rounded-lg bg-gray-200" />
-				</ViewTransition>
+				<div className="aspect-square w-full animate-pulse rounded-lg bg-gray-200" />
 				{/* Thumbnail Images */}
 				<div className="grid grid-cols-3 gap-2">
 					<div className="aspect-square animate-pulse overflow-hidden rounded bg-gray-200" />

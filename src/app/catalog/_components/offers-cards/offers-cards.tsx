@@ -1,9 +1,10 @@
-import { api } from "#/trpc/server";
+"use client";
+import { api } from "#/trpc/react";
 import { OfferCard } from "../offers-card";
 import { OFFERS_CARDS_LIMIT } from "./constants";
 
-export const OffersCards = async () => {
-	const offers = await api.offers.getOffers({
+export const OffersCards = () => {
+	const [offers] = api.offers.getOffers.useSuspenseQuery({
 		page: 1,
 		limit: OFFERS_CARDS_LIMIT,
 		search: "",

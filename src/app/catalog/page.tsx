@@ -1,7 +1,14 @@
 import { Suspense } from "react";
+import { api } from "#/trpc/server";
 import { OffersCards, OffersCardsSkeleton } from "./_components/offers-cards";
+import { OFFERS_CARDS_LIMIT } from "./_components/offers-cards/constants";
 
 export default async function CatalogPage() {
+	void api.offers.getOffers.prefetch({
+		page: 1,
+		limit: OFFERS_CARDS_LIMIT,
+		search: "",
+	});
 	return (
 		<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 			<div className="mb-8">

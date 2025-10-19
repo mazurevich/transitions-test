@@ -1,5 +1,7 @@
+"use client";
 import { RotateCcw, Shield, Star, Truck } from "lucide-react";
-import { api } from "#/trpc/server";
+import type { FC } from "react";
+import { api } from "#/trpc/react";
 import { mockOfferDetails } from "../../mocks";
 import { AddToCart } from "../add-to-cart";
 import { Carousel } from "../carousel";
@@ -13,8 +15,8 @@ type DetailsProps = {
 	id: number;
 };
 
-export async function Details({ id }: DetailsProps) {
-	const offer = await api.offers.getOffer({ id });
+export const Details: FC<DetailsProps> = ({ id }) => {
+	const [offer] = api.offers.getOffer.useSuspenseQuery({ id });
 	return (
 		<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
 			{/* Product Images */}
@@ -120,4 +122,4 @@ export async function Details({ id }: DetailsProps) {
 			</div>
 		</div>
 	);
-}
+};

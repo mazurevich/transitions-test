@@ -3,6 +3,7 @@ import "#/styles/globals.css";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Header from "#/app/_components/header";
+import { ReactQueryDevtools } from "#/app/_components/ReactQueryDevtools";
 import { TRPCReactProvider } from "#/trpc/react";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function RootLayout({
 			<body>
 				<TRPCReactProvider>
 					<Header />
+					<ReactQueryDevtools initialIsOpen={false} />
 					<main className="min-h-screen bg-gray-50">{children}</main>
 				</TRPCReactProvider>
 			</body>
