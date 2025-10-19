@@ -8,7 +8,9 @@ import "./src/env.js";
 const config = {
 	experimental: {
 		viewTransition: true,
+		cacheComponents: true,
 	},
+	reactCompiler: true,
 	images: {
 		remotePatterns: [
 			{ protocol: "https", hostname: "fastly.picsum.photos", pathname: "/**" },
