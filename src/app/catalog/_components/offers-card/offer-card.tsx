@@ -12,17 +12,19 @@ export const OfferCard: FC<{ offer: OfferWithReviews }> = ({ offer }) => {
 	return (
 		<div className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg">
 			<Link href={`/offers/${offer.id}`} className="block">
-				<div className="relative">
+				<div className="h-48 w-full overflow-hidden">
 					{offer.OfferImage[0] ? (
-						<ViewTransition name={`offer-image-${offer.OfferImage[0]?.id}`}>
-							<Image
-								width={400}
-								height={300}
-								src={offer.OfferImage[0].imageUrl}
-								alt={offer.title}
-								className="h-48 w-full object-cover"
-							/>{" "}
-						</ViewTransition>
+						<div className="relative">
+							<ViewTransition name={`offer-image-${offer.OfferImage[0]?.id}`}>
+								<Image
+									width={400}
+									height={300}
+									src={offer.OfferImage[0].imageUrl}
+									alt={offer.title}
+									className="h-full w-full object-cover transition-all duration-300 hover:scale-105"
+								/>{" "}
+							</ViewTransition>
+						</div>
 					) : (
 						<div className="h-48 w-full animate-pulse bg-gray-200" />
 					)}
