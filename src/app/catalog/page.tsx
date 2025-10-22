@@ -1,5 +1,6 @@
-import { Suspense } from "react";
-import { api } from "#/trpc/server";
+/** @ts-ignore */
+import { Suspense, ViewTransition } from "react";
+import { api, HydrateClient } from "#/trpc/server";
 import { OffersCards, OffersCardsSkeleton } from "./_components/offers-cards";
 import { OFFERS_CARDS_LIMIT } from "./_components/offers-cards/constants";
 
@@ -24,9 +25,11 @@ export default async function CatalogPage() {
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				<Suspense fallback={<OffersCardsSkeleton />}>
-					<OffersCards />
-				</Suspense>
+				<ViewTransition>
+					<Suspense fallback={<OffersCardsSkeleton />}>
+						<OffersCards />
+					</Suspense>
+				</ViewTransition>
 			</div>
 		</div>
 	);

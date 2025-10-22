@@ -1,7 +1,7 @@
 "use client";
 import { ShoppingCart } from "lucide-react";
-import { useState } from "react";
-import { ViewTransition } from "#/app/_components";
+/** @ts-ignore */
+import { useState, ViewTransition } from "react";
 
 export const AddToCart = ({
 	offerId,

@@ -1,9 +1,10 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 "use client";
 import { ShoppingCart, Star } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
-import { ViewTransition } from "#/app/_components";
+/** @ts-ignore */
+import { ViewTransition } from "react";
 import type { RouterOutputs } from "#/trpc/react";
 
 type OfferWithReviewCount = RouterOutputs["offers"]["getOffers"][number];
@@ -15,8 +16,11 @@ export const OfferCard: FC<{ offer: OfferWithReviewCount }> = ({ offer }) => {
 				<div className="h-48 w-full overflow-hidden">
 					{offer.OfferImage[0] ? (
 						<div className="relative">
-							<ViewTransition name={`offer-image-${offer.OfferImage[0]?.id}`}>
-								<Image
+							<ViewTransition
+								enter="asdf"
+								name={`offer-image-${offer.OfferImage[0]?.id}`}
+							>
+								<img
 									width={400}
 									height={300}
 									src={offer.OfferImage[0].imageUrl}
@@ -57,10 +61,7 @@ export const OfferCard: FC<{ offer: OfferWithReviewCount }> = ({ offer }) => {
 						<div className="flex items-center">
 							{[...Array(5)].map((_, i) => (
 								<Star
-									key={`star-${
-										// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-										i
-									}`}
+									key={`star-${i}`}
 									className={`h-4 w-4 ${
 										i < Math.floor(offer.rating)
 											? "fill-current text-yellow-400"

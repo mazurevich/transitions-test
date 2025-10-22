@@ -1,5 +1,6 @@
 "use client";
-import { ViewTransition } from "#/app/_components";
+/** @ts-ignore */
+import { ViewTransition } from "react";
 
 export const Title = ({ id, title }: { id: number; title: string }) => {
 	return (

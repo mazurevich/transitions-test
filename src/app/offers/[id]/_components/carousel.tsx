@@ -1,8 +1,8 @@
 "use client";
 import type { OfferImage } from "@prisma/client";
 import Image from "next/image";
-import { type FC, useState } from "react";
-import { ViewTransition } from "#/app/_components";
+/** @ts-ignore */
+import { type FC, useState, ViewTransition } from "react";
 
 type OfferImageWithId = {
 	images: Pick<OfferImage, "id" | "imageUrl" | "title">[];
@@ -21,8 +21,17 @@ export const Carousel: FC<OfferImageWithId> = ({ images }) => {
 	return (
 		<div className="space-y-4">
 			<div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-				<ViewTransition name={`offer-image-${currentImage.id}`}>
-					<Image
+				<ViewTransition
+					name={`offer-image-${currentImage.id}`}
+					onEnter={(element: HTMLElement, type: string) => {
+						console.log("enter", element, type);
+					}}
+					onExit={(element: HTMLElement, type: string) => {
+						console.log("leave", element, type);
+					}}
+					onShare={() => console.log("share")}
+				>
+					<img
 						src={imageUrl}
 						alt={`${title} view ${selectedImage + 1}`}
 						className="h-full w-full object-cover"

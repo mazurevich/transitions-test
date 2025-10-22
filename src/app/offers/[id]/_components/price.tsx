@@ -1,7 +1,7 @@
-"use client";
 import type { Offer } from "@prisma/client";
 import type { FC } from "react";
-import { ViewTransition } from "#/app/_components";
+/** @ts-ignore */
+import { ViewTransition } from "react";
 
 type PriceProps = Pick<Offer, "id" | "price" | "originalPrice">;
 
