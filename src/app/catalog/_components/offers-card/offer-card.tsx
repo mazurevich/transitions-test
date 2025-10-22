@@ -9,15 +9,9 @@ import type { RouterOutputs } from "#/trpc/react";
 type OfferWithReviewCount = RouterOutputs["offers"]["getOffers"][number];
 
 export const OfferCard: FC<{ offer: OfferWithReviewCount }> = ({ offer }) => {
-	// const serrializedOffer = JSON.stringify(offer);
-
 	return (
 		<div className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg">
-			<Link
-				href={`/offers/${offer.id}`}
-				className="block"
-				// as={`/offers/${offer.id}`}
-			>
+			<Link href={`/offers/${offer.id}`} className="block">
 				<div className="h-48 w-full overflow-hidden">
 					{offer.OfferImage[0] ? (
 						<div className="relative">
@@ -28,7 +22,7 @@ export const OfferCard: FC<{ offer: OfferWithReviewCount }> = ({ offer }) => {
 									src={offer.OfferImage[0].imageUrl}
 									alt={offer.title}
 									className="h-full w-full object-cover transition-all duration-300 hover:scale-105"
-								/>{" "}
+								/>
 							</ViewTransition>
 						</div>
 					) : (
