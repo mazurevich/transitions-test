@@ -3,6 +3,9 @@ import { api } from "#/trpc/server";
 import { OffersCards, OffersCardsSkeleton } from "./_components/offers-cards";
 import { OFFERS_CARDS_LIMIT } from "./_components/offers-cards/constants";
 
+// Force dynamic rendering to prevent build-time prerendering issues
+export const dynamic = "force-dynamic";
+
 export default async function CatalogPage() {
 	void api.offers.getOffers.prefetch({
 		page: 1,

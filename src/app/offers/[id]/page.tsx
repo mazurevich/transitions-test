@@ -7,6 +7,9 @@ import { Details } from "./_components/details";
 import { DetailsSkeleton } from "./_components/details/skeleton";
 import { mockOfferDetails } from "./mocks";
 
+// Force dynamic rendering to prevent build-time prerendering issues
+export const dynamic = "force-dynamic";
+
 // Mock data for offer details
 
 const OfferDetailsPage = async ({

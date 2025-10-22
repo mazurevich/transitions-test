@@ -8,7 +8,7 @@ import "./src/env.js";
 const config = {
 	experimental: {
 		viewTransition: true,
-		cacheComponents: true,
+		// cacheComponents: true,
 	},
 	reactCompiler: true,
 

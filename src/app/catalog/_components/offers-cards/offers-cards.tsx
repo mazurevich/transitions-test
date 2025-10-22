@@ -12,12 +12,13 @@ export const OffersCards = () => {
 		limit: OFFERS_CARDS_LIMIT,
 		search: "",
 	});
-	const _utils = api.useUtils();
 
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		// adde chache for all singe items which we get from getOffer
+		// add chache for all singe items which we get from getOffer
+		// navigation to items will be instant in that case
+		// shape of data should be the same to not break details page
 		offers.forEach((offer) => {
 			const key = getQueryKey(
 				api.offers.getOffer,
@@ -26,8 +27,6 @@ export const OffersCards = () => {
 				},
 				"query",
 			);
-			console.log(key);
-			console.log(offer);
 			queryClient.setQueryData(key, offer);
 		});
 	}, [offers, queryClient.setQueryData]);
