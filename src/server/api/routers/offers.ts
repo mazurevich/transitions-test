@@ -1,3 +1,4 @@
+import type { Offer, OfferImage, Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -8,10 +9,26 @@ const inputSchema = z.object({
 	limit: z.number().min(1).max(100).default(10),
 });
 
+const offerSharedInclude: Prisma.OfferInclude = {
+	OfferImage: {
+		select: {
+			id: true,
+			imageUrl: true,
+			title: true,
+		},
+	},
+};
+
+type OfferWithReviewCount = Offer & {
+	reviewsCount: number;
+	rating: number;
+	OfferImage: Pick<OfferImage, "id" | "imageUrl" | "title">[];
+};
+
 export const offersRouter = createTRPCRouter({
 	getOffers: publicProcedure
 		.input(inputSchema)
-		.query(async ({ ctx, input }) => {
+		.query(async ({ ctx, input }): Promise<OfferWithReviewCount[]> => {
 			// First request: Get the required offers
 			const offers = await ctx.db.offer.findMany({
 				where: {
@@ -21,15 +38,7 @@ export const offersRouter = createTRPCRouter({
 					],
 					isActive: true,
 				},
-				include: {
-					OfferImage: {
-						select: {
-							id: true,
-							imageUrl: true,
-							title: true,
-						},
-					},
-				},
+				include: offerSharedInclude,
 				skip: (input.page - 1) * input.limit,
 				take: input.limit,
 				orderBy: {
@@ -85,42 +94,36 @@ export const offersRouter = createTRPCRouter({
 		}),
 	getOffer: publicProcedure
 		.input(z.object({ id: z.number() }))
-		.query(async ({ ctx, input }) => {
-			const offer = await ctx.db.offer.findUnique({
-				where: { id: input.id },
-				include: {
-					OfferImage: {
-						select: {
-							id: true,
-							imageUrl: true,
-							title: true,
-						},
+		.query(async ({ ctx, input }): Promise<OfferWithReviewCount> => {
+			const [offer, _reviewStat] = await Promise.all([
+				ctx.db.offer.findUnique({
+					where: { id: input.id },
+					include: offerSharedInclude,
+				}),
+				ctx.db.offerReview.groupBy({
+					by: "offerId",
+					where: {
+						offerId: input.id,
 					},
-					OfferReview: {
-						select: {
-							id: true,
-							rating: true,
-							comment: true,
-							createdAt: true,
-							User: {
-								select: {
-									id: true,
-									email: true,
-								},
-							},
-						},
-						orderBy: {
-							createdAt: "desc",
-						},
+					_avg: {
+						rating: true,
 					},
-				},
-			});
+					_count: {
+						rating: true,
+					},
+				}),
+			]);
 
+			console.log("_reviewStat", _reviewStat);
 			if (!offer) {
 				throw new TRPCError({ code: "NOT_FOUND", message: "Offer not found" });
 			}
 
-			return offer;
+			return {
+				...offer,
+				reviewsCount: _reviewStat[0]?._count.rating || 0,
+				rating: _reviewStat[0]?._avg.rating || 0,
+			};
 		}),
 	getReviews: publicProcedure
 		.input(z.object({ id: z.number() }))

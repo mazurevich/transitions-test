@@ -11,14 +11,10 @@ import { mockOfferDetails } from "./mocks";
 
 const OfferDetailsPage = async ({
 	params,
-	searchParams,
 }: {
 	params: Promise<{ id: string }>;
-	searchParams: Promise<{ preload?: string }>;
 }) => {
 	const { id } = await params;
-	const { preload } = await searchParams;
-	console.log("preload", preload);
 	void api.offers.getOffer.prefetch({ id: Number.parseInt(id) });
 
 	return (

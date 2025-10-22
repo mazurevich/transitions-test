@@ -51,7 +51,7 @@ export const Details: FC<DetailsProps> = ({ id }) => {
 							))}
 						</div>
 						<span className="ml-2 text-gray-600">
-							{offer.rating} ({offer.OfferReview.length} reviews)
+							{offer.rating} ({offer.reviewsCount} reviews)
 						</span>
 					</div>
 					<Price
