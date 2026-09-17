@@ -1,8 +1,7 @@
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 import { api, HydrateClient } from "#/trpc/server";
 import { Reviews, ReviewsSkeleton } from "./_components";
+import { BackToCatalog } from "./_components/back-to-catalog";
 import { Details } from "./_components/details";
 import { DetailsSkeleton } from "./_components/details/skeleton";
 import { mockOfferDetails } from "./mocks";
@@ -23,15 +22,7 @@ const OfferDetailsPage = async ({
 	return (
 		<HydrateClient>
 			<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-				{/* Back Button */}
-				<Link
-					href="/catalog"
-					className="mb-6 inline-flex items-center text-gray-600 transition-colors hover:text-gray-900"
-					aria-label="Back to catalog"
-				>
-					<ArrowLeft className="mr-2 h-4 w-4" />
-					Back to Catalog
-				</Link>
+				<BackToCatalog />
 
 				<Suspense fallback={<DetailsSkeleton id={Number.parseInt(id)} />}>
 					<Details id={Number.parseInt(id)} />

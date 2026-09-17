@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { getPlaceholderImageSrc } from "../src/lib/placeholder-image";
 
 const prisma = new PrismaClient();
 
@@ -108,29 +109,14 @@ const randomItem = <T>(array: T[]): T => {
 	return array[Math.floor(Math.random() * array.length)] as T;
 };
 
-// Function to generate placeholder image URL
-const generateImageUrl = (width = 400, height = 300, seed?: number): string => {
-	const seedParam = seed ? `?random=${seed}` : "";
-	return `https://picsum.photos/${width}/${height}${seedParam}`;
-};
-
-const getRealUrl = async (url: string): Promise<string> => {
-  const image = await fetch(url);
-  return image.url;
-}
-// Function to generate multiple images for an offer
-const generateOfferImages = async (
+const generateOfferImages = (
 	offerId: number,
 	count: number = randomBetween(2, 4),
-): Promise<Array<{ offerId: number; imageUrl: string }>> => {
-	const images = await Promise.all(Array.from({ length: count }, async (_, index) => {
-		const imageUrl = await getRealUrl(generateImageUrl(400, 300, offerId * 10 + index));
-		return {
-			offerId,
-			imageUrl,
-		};
+): Array<{ offerId: number; imageUrl: string }> => {
+	return Array.from({ length: count }, (_, index) => ({
+		offerId,
+		imageUrl: getPlaceholderImageSrc(offerId * 10 + index),
 	}));
-	return images;
 };
 // Function to generate sample users for reviews
 const generateSampleUsers = async (count = 20) => {
@@ -216,8 +202,7 @@ async function main() {
 
 		offers.push(offer);
 
-		// Generate additional images for this offer
-		const offerImages = await generateOfferImages(offer.id);
+		const offerImages = generateOfferImages(offer.id);
 		await prisma.offerImage.createMany({
 			data: offerImages,
 		});

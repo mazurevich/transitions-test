@@ -3,6 +3,7 @@ import type { OfferImage } from "@prisma/client";
 import Image from "next/image";
 import { type FC, useState } from "react";
 import { ViewTransition } from "#/app/_components";
+import { getOfferImageSrc } from "#/lib/placeholder-image";
 
 type OfferImageWithId = {
 	images: Pick<OfferImage, "id" | "imageUrl" | "title">[];
@@ -16,7 +17,7 @@ export const Carousel: FC<OfferImageWithId> = ({ images }) => {
 	}
 
 	const title = currentImage.title ?? "Offer";
-	const imageUrl = currentImage.imageUrl;
+	const imageUrl = getOfferImageSrc(currentImage);
 
 	return (
 		<div className="space-y-4">
@@ -47,7 +48,7 @@ export const Carousel: FC<OfferImageWithId> = ({ images }) => {
 						<Image
 							width={400}
 							height={300}
-							src={image.imageUrl}
+							src={getOfferImageSrc(image)}
 							alt={`${image.title ?? "Offer"} view ${index + 1}`}
 							className="h-full w-full object-cover"
 						/>

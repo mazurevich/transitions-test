@@ -6,18 +6,7 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
-	experimental: {
-		viewTransition: true,
-		// cacheComponents: true,
-	},
 	reactCompiler: true,
-
-	images: {
-		remotePatterns: [
-			{ protocol: "https", hostname: "fastly.picsum.photos", pathname: "/**" },
-			{ protocol: "https", hostname: "picsum.photos", pathname: "/**" },
-		],
-	},
 };
 
 export default config;

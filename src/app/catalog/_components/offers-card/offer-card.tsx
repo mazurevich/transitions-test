@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
 import { ViewTransition } from "#/app/_components";
+import { getOfferImageSrc } from "#/lib/placeholder-image";
 import type { RouterOutputs } from "#/trpc/react";
 
 type OfferWithReviewCount = RouterOutputs["offers"]["getOffers"][number];
@@ -19,7 +20,7 @@ export const OfferCard: FC<{ offer: OfferWithReviewCount }> = ({ offer }) => {
 								<Image
 									width={400}
 									height={300}
-									src={offer.OfferImage[0].imageUrl}
+									src={getOfferImageSrc(offer.OfferImage[0])}
 									alt={offer.title}
 									className="h-full w-full object-cover transition-all duration-300 hover:scale-105"
 								/>

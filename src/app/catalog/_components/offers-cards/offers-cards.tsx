@@ -1,7 +1,11 @@
 "use client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+import {
+	clearPendingScroll,
+	restorePendingScroll,
+} from "#/app/_components/scroll-restoration";
 import { api } from "#/trpc/react";
 import { OfferCard } from "../offers-card";
 import { OFFERS_CARDS_LIMIT } from "./constants";
@@ -14,6 +18,11 @@ export const OffersCards = () => {
 	});
 
 	const queryClient = useQueryClient();
+
+	useLayoutEffect(() => {
+		restorePendingScroll();
+		clearPendingScroll();
+	}, []);
 
 	useEffect(() => {
 		// add chache for all singe items which we get from getOffer
